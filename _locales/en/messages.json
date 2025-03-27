@@ -1,0 +1,78 @@
+{
+  "extensionDescription": {
+    "description": "Extension description",
+    "message": "Chrome extension boilerplate developed with Vite, React and Typescript"
+  },
+  "extensionName": {
+    "description": "Description",
+    "message": "The Extension"
+  },
+  "toggleTheme": {
+    "message": "Toggle theme"
+  },
+  "loading": {
+    "message": "Loading..."
+  },
+  "greeting": {
+    "description": "Greeting message",
+    "message": "Hello, My name is $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Doe"
+      }
+    }
+  },
+  "hello": {
+    "description": "Placeholder example",
+    "message": "Hello $1"
+  },
+  "home": {
+    "message": "Home"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "about": {
+    "message": "About"
+  },
+  "view": {
+    "message": "View"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "create_new_folder": {
+    "message": "Create new folder"
+  },
+  "back": {
+    "message": "Back"
+  },
+  "upload": {
+    "message": "Upload"
+  },
+  "folder": {
+    "message": "Folder"
+  },
+  "photos_in_this_folder": {
+    "message": "Photos in this folder"
+  },
+  "no_photos_in_this_folder": {
+    "message": "No photos in this folder"
+  },
+  "insert_photo": {
+    "message": "Insert photo"
+  },
+  "cloudinary_settings": {
+    "message": "Cloudinary Settings"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "you_can_get_it_form": {
+    "message": "You can get it form"
+  },
+  "folder_empty": {
+    "message": "No folders or photos available. Upload some in the options page!"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "extensionDescription": {
+    "description": "Mô tả tiện ích",
+    "message": "Mẫu tiện ích mở rộng Chrome được phát triển với Vite, React và TypeScript"
+  },
+  "extensionName": {
+    "description": "Mô tả",
+    "message": "The Extension"
+  },
+  "toggleTheme": {
+    "message": "Chuyển đổi giao diện"
+  },
+  "loading": {
+    "message": "Đang tải..."
+  },
+  "greeting": {
+    "description": "Lời chào",
+    "message": "Xin chào, tôi tên là $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Nguyễn Văn A"
+      }
+    }
+  },
+  "hello": {
+    "description": "Ví dụ về placeholder",
+    "message": "Xin chào $1"
+  },
+  "home": {
+    "message": "Trang chủ"
+  },
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "about": {
+    "message": "Về chúng tôi"
+  },
+  "view": {
+    "message": "Xem chi tiết"
+  },
+  "delete": {
+    "message": "Xóa"
+  },
+  "create_new_folder": {
+    "message": "Tạo thư mục mới"
+  },
+  "back": {
+    "message": "Quay về"
+  },
+  "upload": {
+    "message": "Tải lên"
+  },
+  "folder": {
+    "message": "Thư mục"
+  },
+  "photos_in_this_folder": {
+    "message": "Danh sách ảnh trong thư mục này"
+  },
+  "no_photos_in_this_folder": {
+    "message": "Không có ảnh trong thư mục này"
+  },
+  "insert_photo": {
+    "message": "Thêm ảnh"
+  },
+  "cloudinary_settings": {
+    "message": "Cài đặt cloudinary"
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "you_can_get_it_form": {
+    "message": "Bạn có thể lấy key này tại đây"
+  },
+  "folder_empty": {
+    "message": "Không có thư mục hoặc ảnh nào. Hãy tải lên một số ảnh trong trang cài đặt!"
+  }
+}
