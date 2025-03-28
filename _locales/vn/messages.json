@@ -83,5 +83,14 @@
   },
   "error_generic": {
     "message": "Đã có lỗi xảy ra!"
+  },
+  "gallery": {
+    "message": "Thư viện"
+  },
+  "recent_photos": {
+    "message": "Ảnh gần đây"
+  },
+  "no_recent_photos": {
+    "message": "Không có ảnh gần đây"
   }
 }

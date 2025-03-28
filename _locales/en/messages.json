@@ -83,5 +83,14 @@
   },
   "error_generic": {
     "message": "Something went wrong!"
+  },
+  "gallery":{
+    "message": "Gallery"
+  },
+  "recent_photos": {
+    "message": "Recent photos"
+  },
+  "no_recent_photos":{
+    "message": "No recent photos"
   }
 }
