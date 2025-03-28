@@ -74,5 +74,14 @@
   },
   "folder_empty": {
     "message": "Không có thư mục hoặc ảnh nào. Hãy tải lên một số ảnh trong trang cài đặt!"
+  },
+  "notification": {
+    "message": "Thông báo"
+  },
+  "cloudinary_configure": {
+    "message": "Vui lòng cấu hình Cloudinary trước"
+  },
+  "error_generic": {
+    "message": "Đã có lỗi xảy ra!"
   }
 }

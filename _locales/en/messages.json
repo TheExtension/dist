@@ -74,5 +74,14 @@
   },
   "folder_empty": {
     "message": "No folders or photos available. Upload some in the options page!"
+  },
+  "notification": {
+    "message": "Notification"
+  },
+  "cloudinary_configure": {
+    "message": "Please configure Cloudinary settings first"
+  },
+  "error_generic": {
+    "message": "Something went wrong!"
   }
 }
