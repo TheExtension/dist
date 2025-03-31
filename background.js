@@ -1,16 +1,16 @@
-var F = { exports: {} }, Z = F.exports, q;
-function V() {
-  return q || (q = 1, function(g, p) {
-    (function(i, A) {
-      A(g);
-    })(typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : Z, function(i) {
+var p = { exports: {} }, O = p.exports, R;
+function q() {
+  return R || (R = 1, function(f, N) {
+    (function(l, c) {
+      c(f);
+    })(typeof globalThis < "u" ? globalThis : typeof self < "u" ? self : O, function(l) {
       if (!(globalThis.chrome && globalThis.chrome.runtime && globalThis.chrome.runtime.id))
         throw new Error("This script should only be loaded in a browser extension.");
       if (globalThis.browser && globalThis.browser.runtime && globalThis.browser.runtime.id)
-        i.exports = globalThis.browser;
+        l.exports = globalThis.browser;
       else {
-        const A = "The message port closed before a response was received.", h = (x) => {
-          const f = {
+        const c = "The message port closed before a response was received.", $ = (x) => {
+          const k = {
             alarms: {
               clear: {
                 minArgs: 0,
@@ -682,175 +682,175 @@ function V() {
               }
             }
           };
-          if (Object.keys(f).length === 0)
+          if (Object.keys(k).length === 0)
             throw new Error("api-metadata.json has not been included in browser-polyfill");
-          class M extends WeakMap {
-            constructor(s, n = void 0) {
-              super(n), this.createItem = s;
+          class v extends WeakMap {
+            constructor(r, g = void 0) {
+              super(g), this.createItem = r;
             }
-            get(s) {
-              return this.has(s) || this.set(s, this.createItem(s)), super.get(s);
+            get(r) {
+              return this.has(r) || this.set(r, this.createItem(r)), super.get(r);
             }
           }
-          const L = (e) => e && typeof e == "object" && typeof e.then == "function", T = (e, s) => (...n) => {
-            x.runtime.lastError ? e.reject(new Error(x.runtime.lastError.message)) : s.singleCallbackArg || n.length <= 1 && s.singleCallbackArg !== !1 ? e.resolve(n[0]) : e.resolve(n);
-          }, w = (e) => e == 1 ? "argument" : "arguments", _ = (e, s) => function(t, ...o) {
-            if (o.length < s.minArgs)
-              throw new Error(`Expected at least ${s.minArgs} ${w(s.minArgs)} for ${e}(), got ${o.length}`);
-            if (o.length > s.maxArgs)
-              throw new Error(`Expected at most ${s.maxArgs} ${w(s.maxArgs)} for ${e}(), got ${o.length}`);
-            return new Promise((c, u) => {
-              if (s.fallbackToNoCallback)
+          const L = (e) => e && typeof e == "object" && typeof e.then == "function", E = (e, r) => (...g) => {
+            x.runtime.lastError ? e.reject(new Error(x.runtime.lastError.message)) : r.singleCallbackArg || g.length <= 1 && r.singleCallbackArg !== !1 ? e.resolve(g[0]) : e.resolve(g);
+          }, b = (e) => e == 1 ? "argument" : "arguments", B = (e, r) => function(n, ...i) {
+            if (i.length < r.minArgs)
+              throw new Error(`Expected at least ${r.minArgs} ${b(r.minArgs)} for ${e}(), got ${i.length}`);
+            if (i.length > r.maxArgs)
+              throw new Error(`Expected at most ${r.maxArgs} ${b(r.maxArgs)} for ${e}(), got ${i.length}`);
+            return new Promise((a, t) => {
+              if (r.fallbackToNoCallback)
                 try {
-                  t[e](...o, T({
-                    resolve: c,
-                    reject: u
-                  }, s));
-                } catch (r) {
-                  console.warn(`${e} API method doesn't seem to support the callback parameter, falling back to call it without a callback: `, r), t[e](...o), s.fallbackToNoCallback = !1, s.noCallback = !0, c();
+                  n[e](...i, E({
+                    resolve: a,
+                    reject: t
+                  }, r));
+                } catch (s) {
+                  console.warn(`${e} API method doesn't seem to support the callback parameter, falling back to call it without a callback: `, s), n[e](...i), r.fallbackToNoCallback = !1, r.noCallback = !0, a();
                 }
-              else s.noCallback ? (t[e](...o), c()) : t[e](...o, T({
-                resolve: c,
-                reject: u
-              }, s));
+              else r.noCallback ? (n[e](...i), a()) : n[e](...i, E({
+                resolve: a,
+                reject: t
+              }, r));
             });
-          }, N = (e, s, n) => new Proxy(s, {
-            apply(t, o, c) {
-              return n.call(o, e, ...c);
+          }, P = (e, r, g) => new Proxy(r, {
+            apply(n, i, a) {
+              return g.call(i, e, ...a);
             }
           });
-          let k = Function.call.bind(Object.prototype.hasOwnProperty);
-          const y = (e, s = {}, n = {}) => {
-            let t = /* @__PURE__ */ Object.create(null), o = {
-              has(u, r) {
-                return r in e || r in t;
+          let h = Function.call.bind(Object.prototype.hasOwnProperty);
+          const w = (e, r = {}, g = {}) => {
+            let n = /* @__PURE__ */ Object.create(null), i = {
+              has(t, s) {
+                return s in e || s in n;
               },
-              get(u, r, d) {
-                if (r in t)
-                  return t[r];
-                if (!(r in e))
+              get(t, s, A) {
+                if (s in n)
+                  return n[s];
+                if (!(s in e))
                   return;
-                let m = e[r];
+                let m = e[s];
                 if (typeof m == "function")
-                  if (typeof s[r] == "function")
-                    m = N(e, e[r], s[r]);
-                  else if (k(n, r)) {
-                    let v = _(r, n[r]);
-                    m = N(e, e[r], v);
+                  if (typeof r[s] == "function")
+                    m = P(e, e[s], r[s]);
+                  else if (h(g, s)) {
+                    let u = B(s, g[s]);
+                    m = P(e, e[s], u);
                   } else
                     m = m.bind(e);
-                else if (typeof m == "object" && m !== null && (k(s, r) || k(n, r)))
-                  m = y(m, s[r], n[r]);
-                else if (k(n, "*"))
-                  m = y(m, s[r], n["*"]);
+                else if (typeof m == "object" && m !== null && (h(r, s) || h(g, s)))
+                  m = w(m, r[s], g[s]);
+                else if (h(g, "*"))
+                  m = w(m, r[s], g["*"]);
                 else
-                  return Object.defineProperty(t, r, {
+                  return Object.defineProperty(n, s, {
                     configurable: !0,
                     enumerable: !0,
                     get() {
-                      return e[r];
+                      return e[s];
                     },
-                    set(v) {
-                      e[r] = v;
+                    set(u) {
+                      e[s] = u;
                     }
                   }), m;
-                return t[r] = m, m;
+                return n[s] = m, m;
               },
-              set(u, r, d, m) {
-                return r in t ? t[r] = d : e[r] = d, !0;
+              set(t, s, A, m) {
+                return s in n ? n[s] = A : e[s] = A, !0;
               },
-              defineProperty(u, r, d) {
-                return Reflect.defineProperty(t, r, d);
+              defineProperty(t, s, A) {
+                return Reflect.defineProperty(n, s, A);
               },
-              deleteProperty(u, r) {
-                return Reflect.deleteProperty(t, r);
+              deleteProperty(t, s) {
+                return Reflect.deleteProperty(n, s);
               }
-            }, c = Object.create(e);
-            return new Proxy(c, o);
-          }, C = (e) => ({
-            addListener(s, n, ...t) {
-              s.addListener(e.get(n), ...t);
+            }, a = Object.create(e);
+            return new Proxy(a, i);
+          }, y = (e) => ({
+            addListener(r, g, ...n) {
+              r.addListener(e.get(g), ...n);
             },
-            hasListener(s, n) {
-              return s.hasListener(e.get(n));
+            hasListener(r, g) {
+              return r.hasListener(e.get(g));
             },
-            removeListener(s, n) {
-              s.removeListener(e.get(n));
+            removeListener(r, g) {
+              r.removeListener(e.get(g));
             }
-          }), R = new M((e) => typeof e != "function" ? e : function(n) {
-            const t = y(n, {}, {
+          }), F = new v((e) => typeof e != "function" ? e : function(g) {
+            const n = w(g, {}, {
               getContent: {
                 minArgs: 0,
                 maxArgs: 0
               }
             });
-            e(t);
-          }), a = new M((e) => typeof e != "function" ? e : function(n, t, o) {
-            let c = !1, u, r = new Promise((S) => {
-              u = function(b) {
-                c = !0, S(b);
+            e(n);
+          }), S = new v((e) => typeof e != "function" ? e : function(g, n, i) {
+            let a = !1, t, s = new Promise((d) => {
+              t = function(o) {
+                a = !0, d(o);
               };
-            }), d;
+            }), A;
             try {
-              d = e(n, t, u);
-            } catch (S) {
-              d = Promise.reject(S);
+              A = e(g, n, t);
+            } catch (d) {
+              A = Promise.reject(d);
             }
-            const m = d !== !0 && L(d);
-            if (d !== !0 && !m && !c)
+            const m = A !== !0 && L(A);
+            if (A !== !0 && !m && !a)
               return !1;
-            const v = (S) => {
-              S.then((b) => {
-                o(b);
-              }, (b) => {
-                let j;
-                b && (b instanceof Error || typeof b.message == "string") ? j = b.message : j = "An unexpected error occurred", o({
+            const u = (d) => {
+              d.then((o) => {
+                i(o);
+              }, (o) => {
+                let C;
+                o && (o instanceof Error || typeof o.message == "string") ? C = o.message : C = "An unexpected error occurred", i({
                   __mozWebExtensionPolyfillReject__: !0,
-                  message: j
+                  message: C
                 });
-              }).catch((b) => {
-                console.error("Failed to send onMessage rejected reply", b);
+              }).catch((o) => {
+                console.error("Failed to send onMessage rejected reply", o);
               });
             };
-            return v(m ? d : r), !0;
-          }), E = ({
+            return u(m ? A : s), !0;
+          }), _ = ({
             reject: e,
-            resolve: s
-          }, n) => {
-            x.runtime.lastError ? x.runtime.lastError.message === A ? s() : e(new Error(x.runtime.lastError.message)) : n && n.__mozWebExtensionPolyfillReject__ ? e(new Error(n.message)) : s(n);
-          }, $ = (e, s, n, ...t) => {
-            if (t.length < s.minArgs)
-              throw new Error(`Expected at least ${s.minArgs} ${w(s.minArgs)} for ${e}(), got ${t.length}`);
-            if (t.length > s.maxArgs)
-              throw new Error(`Expected at most ${s.maxArgs} ${w(s.maxArgs)} for ${e}(), got ${t.length}`);
-            return new Promise((o, c) => {
-              const u = E.bind(null, {
-                resolve: o,
-                reject: c
+            resolve: r
+          }, g) => {
+            x.runtime.lastError ? x.runtime.lastError.message === c ? r() : e(new Error(x.runtime.lastError.message)) : g && g.__mozWebExtensionPolyfillReject__ ? e(new Error(g.message)) : r(g);
+          }, M = (e, r, g, ...n) => {
+            if (n.length < r.minArgs)
+              throw new Error(`Expected at least ${r.minArgs} ${b(r.minArgs)} for ${e}(), got ${n.length}`);
+            if (n.length > r.maxArgs)
+              throw new Error(`Expected at most ${r.maxArgs} ${b(r.maxArgs)} for ${e}(), got ${n.length}`);
+            return new Promise((i, a) => {
+              const t = _.bind(null, {
+                resolve: i,
+                reject: a
               });
-              t.push(u), n.sendMessage(...t);
+              n.push(t), g.sendMessage(...n);
             });
-          }, I = {
+          }, j = {
             devtools: {
               network: {
-                onRequestFinished: C(R)
+                onRequestFinished: y(F)
               }
             },
             runtime: {
-              onMessage: C(a),
-              onMessageExternal: C(a),
-              sendMessage: $.bind(null, "sendMessage", {
+              onMessage: y(S),
+              onMessageExternal: y(S),
+              sendMessage: M.bind(null, "sendMessage", {
                 minArgs: 1,
                 maxArgs: 3
               })
             },
             tabs: {
-              sendMessage: $.bind(null, "sendMessage", {
+              sendMessage: M.bind(null, "sendMessage", {
                 minArgs: 2,
                 maxArgs: 3
               })
             }
-          }, B = {
+          }, T = {
             clear: {
               minArgs: 1,
               maxArgs: 1
@@ -864,87 +864,32 @@ function V() {
               maxArgs: 1
             }
           };
-          return f.privacy = {
+          return k.privacy = {
             network: {
-              "*": B
+              "*": T
             },
             services: {
-              "*": B
+              "*": T
             },
             websites: {
-              "*": B
+              "*": T
             }
-          }, y(x, I, f);
+          }, w(x, j, k);
         };
-        i.exports = h(chrome);
+        l.exports = $(chrome);
       }
     });
-  }(F)), F.exports;
+  }(p)), p.exports;
 }
-V();
-var P;
-(function(g) {
-  g.Local = "local", g.Sync = "sync", g.Managed = "managed", g.Session = "session";
-})(P || (P = {}));
-var O;
-(function(g) {
-  g.ExtensionPagesOnly = "TRUSTED_CONTEXTS", g.ExtensionPagesAndContentScripts = "TRUSTED_AND_UNTRUSTED_CONTEXTS";
-})(O || (O = {}));
-const l = globalThis.chrome, D = async (g, p) => {
-  const i = (h) => typeof h == "function", A = (h) => h instanceof Promise;
-  return i(g) ? (A(g), g(p)) : g;
-};
-let W = !1;
-function z(g) {
-  if (l && l.storage[g] === void 0)
-    throw new Error(`Check your storage permission in manifest.json: ${g} is not defined`);
-}
-function G(g, p, i) {
-  var C, R;
-  let A = null, h = !1, x = [];
-  const f = (i == null ? void 0 : i.storageEnum) ?? P.Local, M = ((C = i == null ? void 0 : i.serialization) == null ? void 0 : C.serialize) ?? ((a) => a), L = ((R = i == null ? void 0 : i.serialization) == null ? void 0 : R.deserialize) ?? ((a) => a);
-  W === !1 && f === P.Session && (i == null ? void 0 : i.sessionAccessForContentScripts) === !0 && (z(f), l == null || l.storage[f].setAccessLevel({
-    accessLevel: O.ExtensionPagesAndContentScripts
-  }).catch((a) => {
-    console.warn(a), console.warn("Please call setAccessLevel into different context, like a background script.");
-  }), W = !0);
-  const T = async () => {
-    z(f);
-    const a = await (l == null ? void 0 : l.storage[f].get([g]));
-    return a ? L(a[g]) ?? p : p;
-  }, w = () => {
-    x.forEach((a) => a());
-  }, _ = async (a) => {
-    h || (A = await T()), A = await D(a, A), await (l == null ? void 0 : l.storage[f].set({ [g]: M(A) })), w();
-  }, N = (a) => (x = [...x, a], () => {
-    x = x.filter((E) => E !== a);
-  }), k = () => A;
-  T().then((a) => {
-    A = a, h = !0, w();
-  });
-  async function y(a) {
-    if (a[g] === void 0)
-      return;
-    const E = L(a[g].newValue);
-    A !== E && (A = await D(E, A), w());
-  }
-  return l == null || l.storage[f].onChanged.addListener(y), {
-    get: T,
-    set: _,
-    getSnapshot: k,
-    subscribe: N
-  };
-}
-const U = G("theme-storage-key", "light", {
-  storageEnum: P.Local
-}), H = {
-  ...U,
-  toggle: async () => {
-    await U.set((g) => g === "light" ? "dark" : "light");
-  }
-};
-H.get().then((g) => {
-  console.log("theme", g);
+q();
+chrome.runtime.onMessage.addListener((f, N, l) => {
+  if (f.type === "CAPTURE_SCREEN")
+    return chrome.tabs.captureVisibleTab({ format: "png" }, (c) => {
+      if (chrome.runtime.lastError || !c) {
+        l({ success: !1, error: "Lỗi khi chụp ảnh" });
+        return;
+      }
+      chrome.action.openPopup(), setTimeout(() => l({ success: !0, imageUri: c, crop: f.crop }), 500);
+    }), !0;
 });
-console.log("Background loaded");
-console.log("Edit 'chrome-extension/src/background/index.ts' and save to reload.");
+console.log("[The extension] Background loaded");

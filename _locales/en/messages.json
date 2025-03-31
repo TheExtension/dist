@@ -66,6 +66,12 @@
   "cloudinary_settings": {
     "message": "Cloudinary Settings"
   },
+  "geimini_settings": {
+    "message": "Geimini Settings"
+  },
+  "geimini_configure": {
+    "message": "Please configure Geimini settings first"
+  },
   "save": {
     "message": "Save"
   },
@@ -84,13 +90,16 @@
   "error_generic": {
     "message": "Something went wrong!"
   },
-  "gallery":{
+  "gallery": {
     "message": "Gallery"
   },
   "recent_photos": {
     "message": "Recent photos"
   },
-  "no_recent_photos":{
+  "no_recent_photos": {
     "message": "No recent photos"
+  },
+  "translate":{
+    "message": "Translate"
   }
 }

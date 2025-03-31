@@ -66,6 +66,12 @@
   "cloudinary_settings": {
     "message": "Cài đặt cloudinary"
   },
+  "geimini_settings": {
+    "message": "Cài đặt Geimini"
+  },
+  "geimini_configure": {
+    "message": "Vui lòng cấu hình Geimini trước"
+  },
   "save": {
     "message": "Lưu"
   },
@@ -92,5 +98,8 @@
   },
   "no_recent_photos": {
     "message": "Không có ảnh gần đây"
+  },
+  "translate":{
+    "message": "Dịch"
   }
 }
