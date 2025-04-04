@@ -66,11 +66,11 @@
   "cloudinary_settings": {
     "message": "Cloudinary Settings"
   },
-  "geimini_settings": {
-    "message": "Geimini Settings"
+  "gemini_settings": {
+    "message": "Gemini Settings"
   },
-  "geimini_configure": {
-    "message": "Please configure Geimini settings first"
+  "gemini_configure": {
+    "message": "Please configure Gemini settings first"
   },
   "save": {
     "message": "Save"
@@ -99,7 +99,10 @@
   "no_recent_photos": {
     "message": "No recent photos"
   },
-  "translate":{
+  "translate": {
     "message": "Translate"
+  },
+  "enable_18_plus_block": {
+    "message": "Enable NSFW block"
   }
 }

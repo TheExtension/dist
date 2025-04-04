@@ -66,11 +66,11 @@
   "cloudinary_settings": {
     "message": "Cài đặt cloudinary"
   },
-  "geimini_settings": {
-    "message": "Cài đặt Geimini"
+  "gemini_settings": {
+    "message": "Cài đặt Gemini"
   },
-  "geimini_configure": {
-    "message": "Vui lòng cấu hình Geimini trước"
+  "gemini_configure": {
+    "message": "Vui lòng cấu hình Gemini trước"
   },
   "save": {
     "message": "Lưu"
@@ -99,7 +99,10 @@
   "no_recent_photos": {
     "message": "Không có ảnh gần đây"
   },
-  "translate":{
+  "translate": {
     "message": "Dịch"
+  },
+  "enable_18_plus_block": {
+    "message": "Ẩn nội dung NSFW"
   }
 }
