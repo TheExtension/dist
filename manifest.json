@@ -81,5 +81,15 @@
         "*://*/*"
       ]
     }
-  ]
+  ],
+  "commands": {
+    "open-crop-overlay": {
+      "suggested_key": {
+        "default": "Alt+Shift+X",
+        "mac": "Command+Shift+X"
+      },
+      "description": "Open the crop overlay for image selection",
+      "global": false
+    }
+  }
 }

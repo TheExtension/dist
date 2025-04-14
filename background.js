@@ -905,39 +905,24 @@ function requireBrowserPolyfill() {
   }(browserPolyfill$1)), browserPolyfill$1.exports;
 }
 requireBrowserPolyfill();
-function setupReminderAlarms() {
-  chrome.alarms.onAlarm.addListener((r) => {
-    console.log("[Reminder] Alarm triggered:", r), r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
-      const t = e.reminders || [];
-      console.log("[Reminder] Current reminders:", t);
-      const n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
-      s ? (console.log("[Reminder] Found reminder:", s), chrome.notifications.create(
-        {
-          type: "basic",
-          iconUrl: chrome.runtime.getURL("icon-34.png"),
-          title: "Reminder",
-          message: s.description,
-          priority: 2
-        },
-        (a) => {
-          chrome.runtime.lastError ? console.error("[Reminder] Notification error:", chrome.runtime.lastError) : console.log("[Reminder] Notification created:", a);
-        }
-      )) : console.warn("[Reminder] Reminder not found for ID:", n);
-    });
-  });
-}
-function handleReminderMessages(r, e) {
-  if (r.type === "SET_REMINDER" && r.reminder) {
-    const t = r.reminder, n = new Date(t.time).getTime(), s = Date.now();
-    return isNaN(n) ? (console.error("[Reminder] Invalid reminder time:", t.time), e({ success: !1, error: "Invalid reminder time" }), !0) : n <= s ? (console.warn("[Reminder] Reminder time is in the past:", t.time), e({ success: !1, error: "Reminder time must be in the future" }), !0) : (chrome.alarms.create(`reminder_${t.id}`, {
-      when: n
-    }), console.log(`[Reminder] Reminder set for ${t.description} at ${new Date(n).toLocaleString()}`), chrome.alarms.getAll((a) => {
-      console.log("[Reminder] Current alarms:", a);
-    }), e({ success: !0 }), !0);
-  }
-  return r.type === "CLEAR_REMINDER" && r.id ? (chrome.alarms.clear(`reminder_${r.id}`, (t) => {
-    console.log(`[Reminder] Reminder ${r.id} cleared:`, t), e({ success: t });
+function handleCaptureScreenMessages(r, e) {
+  return r.type === "CAPTURE_SCREEN" ? (chrome.tabs.captureVisibleTab({ format: "png" }, (t) => {
+    if (chrome.runtime.lastError || !t) {
+      console.error("[CaptureScreen] Error capturing screen:", chrome.runtime.lastError), e({ success: !1, error: "Failed to capture screen" });
+      return;
+    }
+    chrome.action.openPopup(), setTimeout(() => {
+      console.log("[CaptureScreen] Screen captured, sending response"), e({ success: !0, imageUri: t, crop: r.crop });
+    }, 200);
   }), !0) : !1;
+}
+function openCropOverlay() {
+  chrome.tabs.query({ active: !0, currentWindow: !0 }, (r) => {
+    var e;
+    (e = r[0]) != null && e.id ? (console.log("[CaptureScreen] Sending OPEN_CROP_OVERLAY to tab:", r[0].id), chrome.tabs.sendMessage(r[0].id, { type: "OPEN_CROP_OVERLAY" }, (t) => {
+      chrome.runtime.lastError ? console.error("[CaptureScreen] Error sending message:", chrome.runtime.lastError) : console.log("[CaptureScreen] Crop overlay opened:", t);
+    })) : console.error("[CaptureScreen] No active tab found");
+  });
 }
 var StorageEnum;
 (function(r) {
@@ -84362,17 +84347,43 @@ async function loadImage(r) {
     throw console.error("[NSFW] Error loading image:", e), e;
   }
 }
-function handleCaptureScreenMessages(r, e) {
-  return r.type === "CAPTURE_SCREEN" ? (chrome.tabs.captureVisibleTab({ format: "png" }, (t) => {
-    if (chrome.runtime.lastError || !t) {
-      console.error("[CaptureScreen] Error capturing screen:", chrome.runtime.lastError), e({ success: !1, error: "Failed to capture screen" });
-      return;
-    }
-    chrome.action.openPopup(), setTimeout(() => {
-      console.log("[CaptureScreen] Screen captured, sending response"), e({ success: !0, imageUri: t, crop: r.crop });
-    }, 200);
+function setupReminderAlarms() {
+  chrome.alarms.onAlarm.addListener((r) => {
+    console.log("[Reminder] Alarm triggered:", r), r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
+      const t = e.reminders || [];
+      console.log("[Reminder] Current reminders:", t);
+      const n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
+      s ? (console.log("[Reminder] Found reminder:", s), chrome.notifications.create(
+        {
+          type: "basic",
+          iconUrl: chrome.runtime.getURL("icon-34.png"),
+          title: "Reminder",
+          message: s.description,
+          priority: 2
+        },
+        (a) => {
+          chrome.runtime.lastError ? console.error("[Reminder] Notification error:", chrome.runtime.lastError) : console.log("[Reminder] Notification created:", a);
+        }
+      )) : console.warn("[Reminder] Reminder not found for ID:", n);
+    });
+  });
+}
+function handleReminderMessages(r, e) {
+  if (r.type === "SET_REMINDER" && r.reminder) {
+    const t = r.reminder, n = new Date(t.time).getTime(), s = Date.now();
+    return isNaN(n) ? (console.error("[Reminder] Invalid reminder time:", t.time), e({ success: !1, error: "Invalid reminder time" }), !0) : n <= s ? (console.warn("[Reminder] Reminder time is in the past:", t.time), e({ success: !1, error: "Reminder time must be in the future" }), !0) : (chrome.alarms.create(`reminder_${t.id}`, {
+      when: n
+    }), console.log(`[Reminder] Reminder set for ${t.description} at ${new Date(n).toLocaleString()}`), chrome.alarms.getAll((a) => {
+      console.log("[Reminder] Current alarms:", a);
+    }), e({ success: !0 }), !0);
+  }
+  return r.type === "CLEAR_REMINDER" && r.id ? (chrome.alarms.clear(`reminder_${r.id}`, (t) => {
+    console.log(`[Reminder] Reminder ${r.id} cleared:`, t), e({ success: t });
   }), !0) : !1;
 }
 console.log("[The extension] Background script loaded");
 setupReminderAlarms();
 chrome.runtime.onMessage.addListener((r, e, t) => !!(handleReminderMessages(r, t) || handleNsfwMessages(r, t) || handleCaptureScreenMessages(r, t)));
+chrome.commands.onCommand.addListener((r) => {
+  r === "open-crop-overlay" && openCropOverlay();
+});
