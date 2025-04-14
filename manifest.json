@@ -21,7 +21,8 @@
     "clipboardRead",
     "activeTab",
     "notifications",
-    "sidePanel"
+    "sidePanel",
+    "alarms"
   ],
   "options_page": "options/index.html",
   "background": {

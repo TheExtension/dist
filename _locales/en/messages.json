@@ -36,6 +36,45 @@
   "about": {
     "message": "About"
   },
+  "reminder": {
+    "message": "Reminder"
+  },
+  "description": {
+    "message": "Description"
+  },
+  "reminders": {
+    "message": "Reminders List"
+  },
+  "reminder_added": {
+    "message": "Reminder added successfully"
+  },
+  "reminder_deleted": {
+    "message": "Reminder deleted successfully"
+  },
+  "please_enter_description": {
+    "message": "Please enter a reminder description"
+  },
+  "enter_reminder_description": {
+    "message": "Enter reminder description"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "please_select_time": {
+    "message": "Please select a time"
+  },
+  "select_date_time": {
+    "message": "Select date and time"
+  },
+  "add_reminder": {
+    "message": "Add Reminder"
+  },
+  "your_reminders": {
+    "message": "Your Reminders"
+  },
+  "no_reminders": {
+    "message": "No reminders available"
+  },
   "view": {
     "message": "View"
   },

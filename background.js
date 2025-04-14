@@ -905,7 +905,106 @@ function requireBrowserPolyfill() {
   }(browserPolyfill$1)), browserPolyfill$1.exports;
 }
 requireBrowserPolyfill();
-const global$1 = globalThis || void 0 || self;
+function setupReminderAlarms() {
+  chrome.alarms.onAlarm.addListener((r) => {
+    console.log("[Reminder] Alarm triggered:", r), r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
+      const t = e.reminders || [];
+      console.log("[Reminder] Current reminders:", t);
+      const n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
+      s ? (console.log("[Reminder] Found reminder:", s), chrome.notifications.create(
+        {
+          type: "basic",
+          iconUrl: chrome.runtime.getURL("icon-34.png"),
+          title: "Reminder",
+          message: s.description,
+          priority: 2
+        },
+        (a) => {
+          chrome.runtime.lastError ? console.error("[Reminder] Notification error:", chrome.runtime.lastError) : console.log("[Reminder] Notification created:", a);
+        }
+      )) : console.warn("[Reminder] Reminder not found for ID:", n);
+    });
+  });
+}
+function handleReminderMessages(r, e) {
+  if (r.type === "SET_REMINDER" && r.reminder) {
+    const t = r.reminder, n = new Date(t.time).getTime(), s = Date.now();
+    return isNaN(n) ? (console.error("[Reminder] Invalid reminder time:", t.time), e({ success: !1, error: "Invalid reminder time" }), !0) : n <= s ? (console.warn("[Reminder] Reminder time is in the past:", t.time), e({ success: !1, error: "Reminder time must be in the future" }), !0) : (chrome.alarms.create(`reminder_${t.id}`, {
+      when: n
+    }), console.log(`[Reminder] Reminder set for ${t.description} at ${new Date(n).toLocaleString()}`), chrome.alarms.getAll((a) => {
+      console.log("[Reminder] Current alarms:", a);
+    }), e({ success: !0 }), !0);
+  }
+  return r.type === "CLEAR_REMINDER" && r.id ? (chrome.alarms.clear(`reminder_${r.id}`, (t) => {
+    console.log(`[Reminder] Reminder ${r.id} cleared:`, t), e({ success: t });
+  }), !0) : !1;
+}
+var StorageEnum;
+(function(r) {
+  r.Local = "local", r.Sync = "sync", r.Managed = "managed", r.Session = "session";
+})(StorageEnum || (StorageEnum = {}));
+var SessionAccessLevelEnum;
+(function(r) {
+  r.ExtensionPagesOnly = "TRUSTED_CONTEXTS", r.ExtensionPagesAndContentScripts = "TRUSTED_AND_UNTRUSTED_CONTEXTS";
+})(SessionAccessLevelEnum || (SessionAccessLevelEnum = {}));
+const chrome$1 = globalThis.chrome, updateCache = async (r, e) => {
+  const t = (s) => typeof s == "function", n = (s) => s instanceof Promise;
+  return t(r) ? (n(r), r(e)) : r;
+};
+let globalSessionAccessLevelFlag = !1;
+function checkStoragePermission(r) {
+  if (chrome$1 && chrome$1.storage[r] === void 0)
+    throw new Error(`Check your storage permission in manifest.json: ${r} is not defined`);
+}
+function createStorage(r, e, t) {
+  var y, b;
+  let n = null, s = !1, a = [];
+  const o = (t == null ? void 0 : t.storageEnum) ?? StorageEnum.Local, u = ((y = t == null ? void 0 : t.serialization) == null ? void 0 : y.serialize) ?? ((v) => v), l = ((b = t == null ? void 0 : t.serialization) == null ? void 0 : b.deserialize) ?? ((v) => v);
+  globalSessionAccessLevelFlag === !1 && o === StorageEnum.Session && (t == null ? void 0 : t.sessionAccessForContentScripts) === !0 && (checkStoragePermission(o), chrome$1 == null || chrome$1.storage[o].setAccessLevel({
+    accessLevel: SessionAccessLevelEnum.ExtensionPagesAndContentScripts
+  }).catch((v) => {
+    console.warn(v), console.warn("Please call setAccessLevel into different context, like a background script.");
+  }), globalSessionAccessLevelFlag = !0);
+  const f = async () => {
+    checkStoragePermission(o);
+    const v = await (chrome$1 == null ? void 0 : chrome$1.storage[o].get([r]));
+    return v ? l(v[r]) ?? e : e;
+  }, c = () => {
+    a.forEach((v) => v());
+  }, h = async (v) => {
+    s || (n = await f()), n = await updateCache(v, n), await (chrome$1 == null ? void 0 : chrome$1.storage[o].set({ [r]: u(n) })), c();
+  }, d = (v) => (a = [...a, v], () => {
+    a = a.filter((w) => w !== v);
+  }), m = () => n;
+  f().then((v) => {
+    n = v, s = !0, c();
+  });
+  async function g(v) {
+    if (v[r] === void 0)
+      return;
+    const w = l(v[r].newValue);
+    n !== w && (n = await updateCache(w, n), c());
+  }
+  return chrome$1 == null || chrome$1.storage[o].onChanged.addListener(g), {
+    get: f,
+    set: h,
+    getSnapshot: m,
+    subscribe: d
+  };
+}
+const defaultSettings = {
+  nsfwBlockEnabled: !1
+}, storage = createStorage("config_settings-key", defaultSettings, {
+  storageEnum: StorageEnum.Local
+}), configSettingsStorage = {
+  ...storage,
+  // Method to update the Config settings
+  updateSetting: async (r) => {
+    await storage.set(() => r);
+  },
+  // Method to get a specific Config setting value
+  getSetting: async (r) => (await storage.get())[r]
+}, global$1 = globalThis || void 0 || self;
 /**
  * @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -84193,92 +84292,37 @@ function getTopKClasses(r, e) {
     });
   });
 }
-var StorageEnum;
-(function(r) {
-  r.Local = "local", r.Sync = "sync", r.Managed = "managed", r.Session = "session";
-})(StorageEnum || (StorageEnum = {}));
-var SessionAccessLevelEnum;
-(function(r) {
-  r.ExtensionPagesOnly = "TRUSTED_CONTEXTS", r.ExtensionPagesAndContentScripts = "TRUSTED_AND_UNTRUSTED_CONTEXTS";
-})(SessionAccessLevelEnum || (SessionAccessLevelEnum = {}));
-const chrome$1 = globalThis.chrome, updateCache = async (r, e) => {
-  const t = (s) => typeof s == "function", n = (s) => s instanceof Promise;
-  return t(r) ? (n(r), r(e)) : r;
-};
-let globalSessionAccessLevelFlag = !1;
-function checkStoragePermission(r) {
-  if (chrome$1 && chrome$1.storage[r] === void 0)
-    throw new Error(`Check your storage permission in manifest.json: ${r} is not defined`);
-}
-function createStorage(r, e, t) {
-  var y, b;
-  let n = null, s = !1, a = [];
-  const o = (t == null ? void 0 : t.storageEnum) ?? StorageEnum.Local, u = ((y = t == null ? void 0 : t.serialization) == null ? void 0 : y.serialize) ?? ((v) => v), l = ((b = t == null ? void 0 : t.serialization) == null ? void 0 : b.deserialize) ?? ((v) => v);
-  globalSessionAccessLevelFlag === !1 && o === StorageEnum.Session && (t == null ? void 0 : t.sessionAccessForContentScripts) === !0 && (checkStoragePermission(o), chrome$1 == null || chrome$1.storage[o].setAccessLevel({
-    accessLevel: SessionAccessLevelEnum.ExtensionPagesAndContentScripts
-  }).catch((v) => {
-    console.warn(v), console.warn("Please call setAccessLevel into different context, like a background script.");
-  }), globalSessionAccessLevelFlag = !0);
-  const f = async () => {
-    checkStoragePermission(o);
-    const v = await (chrome$1 == null ? void 0 : chrome$1.storage[o].get([r]));
-    return v ? l(v[r]) ?? e : e;
-  }, c = () => {
-    a.forEach((v) => v());
-  }, h = async (v) => {
-    s || (n = await f()), n = await updateCache(v, n), await (chrome$1 == null ? void 0 : chrome$1.storage[o].set({ [r]: u(n) })), c();
-  }, d = (v) => (a = [...a, v], () => {
-    a = a.filter((w) => w !== v);
-  }), m = () => n;
-  f().then((v) => {
-    n = v, s = !0, c();
-  });
-  async function g(v) {
-    if (v[r] === void 0)
-      return;
-    const w = l(v[r].newValue);
-    n !== w && (n = await updateCache(w, n), c());
-  }
-  return chrome$1 == null || chrome$1.storage[o].onChanged.addListener(g), {
-    get: f,
-    set: h,
-    getSnapshot: m,
-    subscribe: d
-  };
-}
-const defaultSettings = {
-  nsfwBlockEnabled: !1
-}, storage = createStorage("config_settings-key", defaultSettings, {
-  storageEnum: StorageEnum.Local
-}), configSettingsStorage = {
-  ...storage,
-  // Method to update the Config settings
-  updateSetting: async (r) => {
-    await storage.set(() => r);
-  },
-  // Method to get a specific Config setting value
-  getSetting: async (r) => (await storage.get())[r]
-}, ht = class ht {
+const ht = class ht {
   constructor() {
     ft(this, "model", null);
     ft(this, "loadingPromise", null);
     ft(this, "retryCount", 0);
     ft(this, "maxRetries", 3);
-    ft(this, "modelUrl", "https://raw.githubusercontent.com/infinitered/nsfwjs/refs/heads/master/models/mobilenet_v2/model.json");
+    ft(this, "modelUrl", "https://raw.githubusercontent.com/TheExtension/NSFW_models/refs/heads/main/mobilenet_v2/model.json");
   }
   static getInstance() {
     return ht.instance || (ht.instance = new ht()), ht.instance;
   }
   async getModel() {
-    return this.model ? this.model : this.loadingPromise ? this.loadingPromise.then(() => this.model) : (this.loadingPromise = this.loadModel(), this.loadingPromise.then(() => this.model));
+    return this.model ? this.model : this.loadingPromise ? this.loadingPromise.then(() => {
+      if (!this.model)
+        throw new Error("[NSFW] Model failed to load");
+      return this.model;
+    }) : (this.loadingPromise = this.loadModel(), this.loadingPromise.then(() => {
+      if (!this.model)
+        throw new Error("[NSFW] Model failed to load");
+      return this.model;
+    }));
   }
   async loadModel() {
     try {
-      this.model = await load(this.modelUrl), console.log("[The extension] NSFW model loaded successfully"), this.retryCount = 0;
+      this.model = await load(this.modelUrl), console.log("[NSFW] Model loaded successfully"), this.retryCount = 0;
     } catch (e) {
-      if (console.error("[The extension] Error loading NSFW model:", e), this.retryCount++, this.retryCount < this.maxRetries)
-        return console.log(`[The extension] Retrying model load (${this.retryCount}/${this.maxRetries})...`), await new Promise((t) => setTimeout(t, 1e3 * this.retryCount)), this.loadModel();
-      throw new Error("Failed to load NSFW model after maximum retries");
+      if (console.error("[NSFW] Error loading model:", e), this.retryCount++, this.retryCount < this.maxRetries) {
+        const t = 1e3 * Math.pow(2, this.retryCount - 1);
+        return console.log(`[NSFW] Retrying model load (${this.retryCount}/${this.maxRetries}) after ${t}ms...`), await new Promise((n) => setTimeout(n, t)), this.loadModel();
+      } else
+        throw new Error("[NSFW] Failed to load model after maximum retries");
     } finally {
       this.loadingPromise = null;
     }
@@ -84287,38 +84331,48 @@ const defaultSettings = {
 ft(ht, "instance");
 let ModelManager = ht;
 const modelManager = ModelManager.getInstance();
-chrome.runtime.onMessage.addListener((r, e, t) => {
-  if (r.type === "CAPTURE_SCREEN")
-    return chrome.tabs.captureVisibleTab({ format: "png" }, (n) => {
-      if (chrome.runtime.lastError || !n) {
-        t({ success: !1, error: "Lỗi khi chụp ảnh" });
-        return;
-      }
-      chrome.action.openPopup(), setTimeout(() => t({ success: !0, imageUri: n, crop: r.crop }), 200);
-    }), !0;
-  if (r.type === "CHECK_NSFW")
-    return checkNsfwWithModel(r.mediaUrl).then((n) => t({ isNsfw: n })).catch((n) => {
-      console.error("[The extension] Lỗi khi kiểm tra NSFW:", n), t({ isNsfw: !1 });
-    }), !0;
-});
+function handleNsfwMessages(r, e) {
+  return r.type === "CHECK_NSFW" && r.mediaUrl ? (checkNsfwWithModel(r.mediaUrl).then((t) => e({ isNsfw: t })).catch((t) => {
+    console.error("[NSFW] Error checking NSFW:", t), e({ isNsfw: !1 });
+  }), !0) : !1;
+}
 async function checkNsfwWithModel(r) {
   if (!await configSettingsStorage.getSetting("nsfwBlockEnabled"))
-    return !1;
+    return console.log("[NSFW] NSFW block disabled"), !1;
   try {
     const e = await modelManager.getModel();
-    if (!e)
-      throw new Error("NSFW model not available");
-    const t = await loadImage(r), n = await e.classify(t), s = ["Porn", "Hentai", "Sexy"];
-    return n.reduce((o, u) => s.includes(u.className) ? Math.max(o, u.probability) : o, 0) > 0.6;
+    if (r.startsWith("data:image/svg+xml"))
+      return console.log("[NSFW] Skipping SVG image"), !1;
+    const t = await loadImage(r), n = await e.classify(t), s = ["Porn", "Hentai", "Sexy"], a = n.reduce((o, u) => s.includes(u.className) ? Math.max(o, u.probability) : o, 0);
+    return console.log("[NSFW] NSFW score:", a), a > 0.55;
   } catch (e) {
-    return console.error("[The extension] Lỗi khi kiểm tra NSFW:", e), !1;
+    return console.error("[NSFW] Error checking NSFW:", e), !1;
   }
 }
 async function loadImage(r) {
-  const e = await fetch(r, { mode: "cors" });
-  if (!e.ok)
-    throw new Error(`Failed to fetch image: ${e.statusText}`);
-  const t = await e.blob(), n = await createImageBitmap(t), s = new OffscreenCanvas(n.width, n.height);
-  return s.getContext("2d").drawImage(n, 0, 0), n.close(), s;
+  try {
+    const e = await fetch(r, { mode: "cors" });
+    if (!e.ok)
+      throw new Error(`[NSFW] Failed to fetch image: ${e.statusText}`);
+    const t = await e.blob(), n = await createImageBitmap(t), s = new OffscreenCanvas(224, 224), a = s.getContext("2d");
+    if (!a)
+      throw new Error("[NSFW] Failed to get canvas context");
+    return a.drawImage(n, 0, 0, 224, 224), n.close(), console.log("[NSFW] Image loaded successfully"), s;
+  } catch (e) {
+    throw console.error("[NSFW] Error loading image:", e), e;
+  }
 }
-console.log("[The extension] Background loaded");
+function handleCaptureScreenMessages(r, e) {
+  return r.type === "CAPTURE_SCREEN" ? (chrome.tabs.captureVisibleTab({ format: "png" }, (t) => {
+    if (chrome.runtime.lastError || !t) {
+      console.error("[CaptureScreen] Error capturing screen:", chrome.runtime.lastError), e({ success: !1, error: "Failed to capture screen" });
+      return;
+    }
+    chrome.action.openPopup(), setTimeout(() => {
+      console.log("[CaptureScreen] Screen captured, sending response"), e({ success: !0, imageUri: t, crop: r.crop });
+    }, 200);
+  }), !0) : !1;
+}
+console.log("[The extension] Background script loaded");
+setupReminderAlarms();
+chrome.runtime.onMessage.addListener((r, e, t) => !!(handleReminderMessages(r, t) || handleNsfwMessages(r, t) || handleCaptureScreenMessages(r, t)));

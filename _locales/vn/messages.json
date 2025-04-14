@@ -36,6 +36,45 @@
   "about": {
     "message": "Về chúng tôi"
   },
+  "reminder": {
+    "message": "Nhắc nhở"
+  },
+  "description": {
+    "message": "Mô tả"
+  },
+  "reminders": {
+    "message": "Danh sách nhắc nhở"
+  },
+  "reminder_added": {
+    "message": "Đã thêm nhắc nhở"
+  },
+  "reminder_deleted": {
+    "message": "Đã xóa nhắc nhở"
+  },
+  "please_enter_description": {
+    "message": "Vui lòng nhập nội dung nhắc nhở"
+  },
+  "enter_reminder_description": {
+    "message": "Nhập nội dung nhắc nhở"
+  },
+  "time": {
+    "message": "Thời gian"
+  },
+  "please_select_time": {
+    "message": "Vui lòng chọn thời gian"
+  },
+  "select_date_time": {
+    "message": "Chọn ngày và giờ"
+  },
+  "add_reminder": {
+    "message": "Thêm nhắc nhở"
+  },
+  "your_reminders": {
+    "message": "Những nhắc nhở của bạn"
+  },
+  "no_reminders": {
+    "message": "Chưa có nhắc nhở nào"
+  },
   "view": {
     "message": "Xem chi tiết"
   },
