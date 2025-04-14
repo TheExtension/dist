@@ -143,5 +143,65 @@
   },
   "enable_18_plus_block": {
     "message": "Enable NSFW block"
+  },
+  "settings_saved": {
+    "message": "Settings saved successfully"
+  },
+  "please_enter_cloud_name": {
+    "message": "Please enter Cloud Name"
+  },
+  "please_enter_api_key": {
+    "message": "Please enter API Key"
+  },
+  "please_enter_api_secret": {
+    "message": "Please enter API Secret"
+  },
+  "please_enter_upload_preset": {
+    "message": "Please enter Upload Preset"
+  },
+  "enter_cloudinary_cloud_name": {
+    "message": "Enter Cloudinary Cloud Name"
+  },
+  "enter_cloudinary_api_key": {
+    "message": "Enter Cloudinary API Key"
+  },
+  "enter_cloudinary_api_secret": {
+    "message": "Enter Cloudinary API Secret"
+  },
+  "enter_cloudinary_upload_preset": {
+    "message": "Enter Cloudinary Upload Preset"
+  },
+  "you_can_get_it_from": {
+    "message": "You can get it from"
+  },
+  "enter_gemini_api_key": {
+    "message": "Enter Gemini API key"
+  },
+  "config_settings": {
+    "message": "Config Settings"
+  },
+  "auto_discard_settings": {
+    "message": "Auto-Discard Settings"
+  },
+  "enable_auto_discard": {
+    "message": "Enable Auto-Discard"
+  },
+  "timeout_minutes": {
+    "message": "Timeout (minutes)"
+  },
+  "whitelist": {
+    "message": "Whitelist URLs"
+  },
+  "add": {
+    "message": "Add"
+  },
+  "enter_timeout_minutes": {
+    "message": "Enter timeout in minutes"
+  },
+  "timeout_minimum": {
+    "message": "Timeout must be at least 1 minute"
+  },
+  "enter_whitelist_pattern": {
+    "message": "e.g., *://*.example.com/*"
   }
 }

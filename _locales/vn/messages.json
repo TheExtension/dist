@@ -143,5 +143,65 @@
   },
   "enable_18_plus_block": {
     "message": "Ẩn nội dung NSFW"
+  },
+  "settings_saved": {
+    "message": "Cài đặt đã được lưu thành công"
+  },
+  "please_enter_cloud_name": {
+    "message": "Vui lòng nhập Tên Cloud"
+  },
+  "please_enter_api_key": {
+    "message": "Vui lòng nhập Khóa API"
+  },
+  "please_enter_api_secret": {
+    "message": "Vui lòng nhập Bí mật API"
+  },
+  "please_enter_upload_preset": {
+    "message": "Vui lòng nhập Thiết lập Tải lên"
+  },
+  "enter_cloudinary_cloud_name": {
+    "message": "Nhập Tên Cloud của Cloudinary"
+  },
+  "enter_cloudinary_api_key": {
+    "message": "Nhập Khóa API của Cloudinary"
+  },
+  "enter_cloudinary_api_secret": {
+    "message": "Nhập Bí mật API của Cloudinary"
+  },
+  "enter_cloudinary_upload_preset": {
+    "message": "Nhập Thiết lập Tải lên của Cloudinary"
+  },
+  "you_can_get_it_from": {
+    "message": "Bạn có thể lấy nó từ"
+  },
+  "enter_gemini_api_key": {
+    "message": "Nhập Khóa API của Gemini"
+  },
+  "config_settings": {
+    "message": "Cài đặt Cấu hình"
+  },
+  "auto_discard_settings": {
+    "message": "Cài đặt Tự động Loại bỏ"
+  },
+  "enable_auto_discard": {
+    "message": "Bật Tự động Loại bỏ"
+  },
+  "timeout_minutes": {
+    "message": "Thời gian chờ (phút)"
+  },
+  "whitelist": {
+    "message": "Danh sách URL được phép"
+  },
+  "add": {
+    "message": "Thêm"
+  },
+  "enter_timeout_minutes": {
+    "message": "Nhập thời gian chờ tính bằng phút"
+  },
+  "timeout_minimum": {
+    "message": "Thời gian chờ phải ít nhất là 1 phút"
+  },
+  "enter_whitelist_pattern": {
+    "message": "Ví dụ: *://*.example.com/*"
   }
 }
