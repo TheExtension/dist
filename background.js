@@ -974,7 +974,8 @@ const defaultSettings$1 = {
   // Method to get a specific AutoDiscard setting value
   getSetting: async (r) => (await storage$1.get())[r]
 }, defaultSettings = {
-  nsfwBlockEnabled: !1
+  nsfwBlockEnabled: !1,
+  nsfwThreshold: 0.55
 }, storage = createStorage("config_settings-key", defaultSettings, {
   storageEnum: StorageEnum.Local,
   liveUpdate: !0
@@ -84363,26 +84364,38 @@ ft(ht, "instance");
 let ModelManager = ht;
 const modelManager = ModelManager.getInstance();
 function handleNsfwMessages(r, e) {
-  return r.type === "CHECK_NSFW" && r.mediaUrl ? (checkNsfwWithModel(r.mediaUrl).then((t) => e({ isNsfw: t })).catch((t) => {
-    console.error("[NSFW] Error checking NSFW:", t), e({ isNsfw: !1 });
+  return r.type === "CHECK_NSFW" ? (resolveMediaUrl(r).then((t) => {
+    if (!t) {
+      console.log("[NSFW] No valid media URL"), e({ isNsfw: !1 });
+      return;
+    }
+    checkNsfwWithModel(t).then((n) => e({ isNsfw: n })).catch((n) => {
+      console.error("[NSFW] Error checking NSFW:", n), e({ isNsfw: !1 });
+    });
+  }).catch((t) => {
+    console.error("[NSFW] Error resolving media URL:", t), e({ isNsfw: !1 });
   }), !0) : !1;
 }
+async function resolveMediaUrl(r) {
+  return r.mediaUrl && !r.mediaUrl.includes("placeholder") ? r.mediaUrl : r.dataSrc ? r.dataSrc : r.dataSrcset ? r.dataSrcset : null;
+}
 async function checkNsfwWithModel(r) {
-  if (!await configSettingsStorage.getSetting("nsfwBlockEnabled"))
+  const e = await configSettingsStorage.get();
+  if (!e.nsfwBlockEnabled)
     return console.log("[NSFW] NSFW block disabled"), !1;
   try {
-    const e = await modelManager.getModel();
+    const t = await modelManager.getModel();
     if (r.startsWith("data:image/svg+xml"))
       return console.log("[NSFW] Skipping SVG image"), !1;
-    const t = await loadImage(r), n = await e.classify(t), s = ["Porn", "Hentai", "Sexy"], a = n.reduce((o, u) => s.includes(u.className) ? Math.max(o, u.probability) : o, 0);
-    return console.log("[NSFW] NSFW score:", a), a > 0.55;
-  } catch (e) {
-    return console.error("[NSFW] Error checking NSFW:", e), !1;
+    const n = await loadImage(r), s = await t.classify(n), a = ["Porn", "Hentai", "Sexy"];
+    return s.reduce((u, l) => a.includes(l.className) ? Math.max(u, l.probability) : u, 0) > (e.nsfwThreshold || 0.55);
+  } catch (t) {
+    return console.error("[NSFW] Error checking NSFW:", t), !1;
   }
 }
 async function loadImage(r) {
   try {
-    const e = await fetch(r, { mode: "cors" });
+    const e = await fetch(r, { mode: "cors", cache: "no-cache" });
     if (!e.ok)
       throw new Error(`[NSFW] Failed to fetch image: ${e.statusText}`);
     const t = await e.blob(), n = await createImageBitmap(t), s = new OffscreenCanvas(224, 224), a = s.getContext("2d");
@@ -84393,13 +84406,25 @@ async function loadImage(r) {
     throw console.error("[NSFW] Error loading image:", e), e;
   }
 }
+async function playSound(r = "default.wav", e = 1) {
+  await createOffscreen(), await chrome.runtime.sendMessage({ play: { source: r, volume: e } });
+}
+async function createOffscreen() {
+  await chrome.offscreen.hasDocument() || await chrome.offscreen.createDocument({
+    url: "offscreen.html",
+    reasons: ["AUDIO_PLAYBACK"],
+    justification: "play alarm audio"
+  });
+}
 function setupReminderAlarms() {
   chrome.alarms.onAlarm.addListener((r) => {
     console.log("[Reminder] Alarm triggered:", r), r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
       const t = e.reminders || [];
       console.log("[Reminder] Current reminders:", t);
       const n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
-      s ? (console.log("[Reminder] Found reminder:", s), chrome.notifications.create(
+      s ? (console.log("[Reminder] Found reminder:", s), playSound(chrome.runtime.getURL("alarm.mp3"), 1).catch(
+        (a) => console.error("[Reminder] Audio play error:", a)
+      ), chrome.notifications.create(
         {
           type: "basic",
           iconUrl: chrome.runtime.getURL("icon-34.png"),

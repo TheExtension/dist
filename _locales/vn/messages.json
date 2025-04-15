@@ -144,6 +144,15 @@
   "enable_18_plus_block": {
     "message": "Ẩn nội dung NSFW"
   },
+  "nsfw_threshold": {
+    "message": "Ngưỡng phát hiện nội dung nhạy cảm (NSFW)"
+  },
+  "please_enter_nsfw_threshold": {
+    "message": "Vui lòng nhập ngưỡng phát hiện nội dung nhạy cảm"
+  },
+  "nsfw_threshold_range": {
+    "message": "Ngưỡng phải nằm trong khoảng từ 0 đến 1"
+  },
   "settings_saved": {
     "message": "Cài đặt đã được lưu thành công"
   },

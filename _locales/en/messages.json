@@ -144,6 +144,15 @@
   "enable_18_plus_block": {
     "message": "Enable NSFW block"
   },
+  "nsfw_threshold": {
+    "message":  "NSFW Detection Threshold"
+  },
+  "please_enter_nsfw_threshold": {
+    "message":  "Please enter the NSFW threshold"
+  },
+  "nsfw_threshold_range": {
+    "message":  "Threshold must be between 0 and 1"
+  },
   "settings_saved": {
     "message": "Settings saved successfully"
   },

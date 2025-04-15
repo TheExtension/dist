@@ -1,0 +1,4 @@
+.nsfw-blur {
+    filter: blur(20px) !important;
+    transition: filter 0.3s ease !important;
+}
