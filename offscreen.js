@@ -20,7 +20,6 @@ function playAudio({ source, volume }) {
   currentAudio = new Audio(source);
   currentAudio.volume = volume;
   currentAudio.addEventListener('ended', () => {
-    console.log('[playAudio] Audio playback ended');
     currentAudio = null;
   });
   currentAudio.play().catch(err => console.error('[playAudio] Error:', err));
@@ -28,22 +27,18 @@ function playAudio({ source, volume }) {
 
 // Handle notification dismissal to stop audio
 chrome.notifications.onClosed.addListener((notificationId, byUser) => {
-  console.log(`[Notification] Notification ${notificationId} closed, byUser: ${byUser}`);
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
     currentAudio = null;
-    console.log('[playAudio] Audio stopped due to notification dismissal');
   }
 });
 
 // Optional: Handle notification button clicks or other interactions
 chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
-  console.log(`[Notification] Button ${buttonIndex} clicked on notification ${notificationId}`);
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
     currentAudio = null;
-    console.log('[playAudio] Audio stopped due to notification button click');
   }
 });

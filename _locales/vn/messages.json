@@ -212,5 +212,26 @@
   },
   "enter_whitelist_pattern": {
     "message": "Ví dụ: *://*.example.com/*"
+  },
+  "stock": {
+    "message": "Cổ phiếu"
+  },
+  "price": {
+    "message": "Giá"
+  },
+  "stock_fetch_error": {
+    "message": "Lỗi khi lấy giá cổ phiếu"
+  },
+  "stock_settings": {
+    "message": "Cài đặt cổ phiếu"
+  },
+  "tracked_stocks": {
+    "message": "Cổ phiếu đang theo dõi"
+  },
+  "enter_stock_symbol": {
+    "message": "Nhập mã cổ phiếu (ví dụ: FPT)"
+  },
+  "stock_already_exists": {
+    "message": "Cổ phiếu này đã được theo dõi"
   }
 }

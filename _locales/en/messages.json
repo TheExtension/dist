@@ -212,5 +212,26 @@
   },
   "enter_whitelist_pattern": {
     "message": "e.g., *://*.example.com/*"
+  },
+  "stock": {
+    "message": "Stock"
+  },
+  "price": {
+    "message": "Price"
+  },
+  "stock_fetch_error": {
+    "message": "Stock fetch error"
+  },
+  "stock_settings": {
+    "message": "Stock Settings"
+  },
+  "tracked_stocks": {
+    "message": "Tracked Stocks"
+  },
+  "enter_stock_symbol": {
+    "message": "Enter stock symbol (e.g., FPT)"
+  },
+  "stock_already_exists": {
+    "message": "This stock is already being tracked"
   }
 }

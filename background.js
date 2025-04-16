@@ -1003,7 +1003,7 @@ async function autoDiscardTabs() {
     for (const s of n)
       if (!(!s.id || !s.url || !s.lastAccessed) && !(s.active || s.pinned || s.audible || isUrlWhitelisted(s.url, r.whitelist)) && t - s.lastAccessed > e)
         try {
-          await chrome.tabs.discard(s.id), console.log(`Discarded tab: ${s.url}`);
+          await chrome.tabs.discard(s.id);
         } catch (a) {
           console.error(`Error discarding tab ${s.url}:`, a);
         }
@@ -1024,16 +1024,16 @@ function handleCaptureScreenMessages(r, e) {
       return;
     }
     chrome.action.openPopup(), setTimeout(() => {
-      console.log("[CaptureScreen] Screen captured, sending response"), e({ success: !0, imageUri: t, crop: r.crop });
+      e({ success: !0, imageUri: t, crop: r.crop });
     }, 200);
   }), !0) : !1;
 }
 function openCropOverlay() {
   chrome.tabs.query({ active: !0, currentWindow: !0 }, (r) => {
     var e;
-    (e = r[0]) != null && e.id ? (console.log("[CaptureScreen] Sending OPEN_CROP_OVERLAY to tab:", r[0].id), chrome.tabs.sendMessage(r[0].id, { type: "OPEN_CROP_OVERLAY" }, (t) => {
-      chrome.runtime.lastError ? console.error("[CaptureScreen] Error sending message:", chrome.runtime.lastError) : console.log("[CaptureScreen] Crop overlay opened:", t);
-    })) : console.error("[CaptureScreen] No active tab found");
+    (e = r[0]) != null && e.id ? chrome.tabs.sendMessage(r[0].id, { type: "OPEN_CROP_OVERLAY" }, (t) => {
+      chrome.runtime.lastError && console.error("[CaptureScreen] Error sending message:", chrome.runtime.lastError);
+    }) : console.error("[CaptureScreen] No active tab found");
   });
 }
 const global$1 = globalThis || void 0 || self;
@@ -84366,7 +84366,7 @@ const modelManager = ModelManager.getInstance();
 function handleNsfwMessages(r, e) {
   return r.type === "CHECK_NSFW" ? (resolveMediaUrl(r).then((t) => {
     if (!t) {
-      console.log("[NSFW] No valid media URL"), e({ isNsfw: !1 });
+      e({ isNsfw: !1 });
       return;
     }
     checkNsfwWithModel(t).then((n) => e({ isNsfw: n })).catch((n) => {
@@ -84382,13 +84382,13 @@ async function resolveMediaUrl(r) {
 async function checkNsfwWithModel(r) {
   const e = await configSettingsStorage.get();
   if (!e.nsfwBlockEnabled)
-    return console.log("[NSFW] NSFW block disabled"), !1;
+    return !1;
   try {
     const t = await modelManager.getModel();
     if (r.startsWith("data:image/svg+xml"))
-      return console.log("[NSFW] Skipping SVG image"), !1;
-    const n = await loadImage(r), s = await t.classify(n), a = ["Porn", "Hentai", "Sexy"], o = s.reduce((u, l) => a.includes(l.className) ? Math.max(u, l.probability) : u, 0);
-    return console.log(`[NSFW] NSFW score for ${r}: ${o}`), o > e.nsfwThreshold;
+      return !1;
+    const n = await loadImage(r), s = await t.classify(n), a = ["Porn", "Hentai", "Sexy"];
+    return s.reduce((u, l) => a.includes(l.className) ? Math.max(u, l.probability) : u, 0) > e.nsfwThreshold;
   } catch (t) {
     return console.error("[NSFW] Error checking NSFW:", t), !1;
   }
@@ -84401,7 +84401,7 @@ async function loadImage(r) {
     const t = await e.blob(), n = await createImageBitmap(t), s = new OffscreenCanvas(224, 224), a = s.getContext("2d");
     if (!a)
       throw new Error("[NSFW] Failed to get canvas context");
-    return a.drawImage(n, 0, 0, 224, 224), n.close(), console.log("[NSFW] Image loaded successfully:", r), s;
+    return a.drawImage(n, 0, 0, 224, 224), n.close(), s;
   } catch (e) {
     throw console.error("[NSFW] Error loading image:", r, e), e;
   }
@@ -84418,11 +84418,9 @@ async function createOffscreen() {
 }
 function setupReminderAlarms() {
   chrome.alarms.onAlarm.addListener((r) => {
-    console.log("[Reminder] Alarm triggered:", r), r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
-      const t = e.reminders || [];
-      console.log("[Reminder] Current reminders:", t);
-      const n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
-      s ? (console.log("[Reminder] Found reminder:", s), playSound(chrome.runtime.getURL("alarm.mp3"), 1).catch(
+    r.name.startsWith("reminder_") && chrome.storage.local.get("reminders", (e) => {
+      const t = e.reminders || [], n = r.name.replace("reminder_", ""), s = t.find((a) => a.id === n);
+      s ? (playSound(chrome.runtime.getURL("alarm.mp3"), 1).catch(
         (a) => console.error("[Reminder] Audio play error:", a)
       ), chrome.notifications.create(
         {
@@ -84444,12 +84442,12 @@ function handleReminderMessages(r, e) {
     const t = r.reminder, n = new Date(t.time).getTime(), s = Date.now();
     return isNaN(n) ? (console.error("[Reminder] Invalid reminder time:", t.time), e({ success: !1, error: "Invalid reminder time" }), !0) : n <= s ? (console.warn("[Reminder] Reminder time is in the past:", t.time), e({ success: !1, error: "Reminder time must be in the future" }), !0) : (chrome.alarms.create(`reminder_${t.id}`, {
       when: n
-    }), console.log(`[Reminder] Reminder set for ${t.description} at ${new Date(n).toLocaleString()}`), chrome.alarms.getAll((a) => {
+    }), chrome.alarms.getAll((a) => {
       console.log("[Reminder] Current alarms:", a);
     }), e({ success: !0 }), !0);
   }
   return r.type === "CLEAR_REMINDER" && r.id ? (chrome.alarms.clear(`reminder_${r.id}`, (t) => {
-    console.log(`[Reminder] Reminder ${r.id} cleared:`, t), e({ success: t });
+    e({ success: t });
   }), !0) : !1;
 }
 console.log("[The extension] Background script loaded");
