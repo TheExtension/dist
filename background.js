@@ -84377,7 +84377,7 @@ function handleNsfwMessages(r, e) {
   }), !0) : !1;
 }
 async function resolveMediaUrl(r) {
-  return r.mediaUrl && !r.mediaUrl.includes("placeholder") ? r.mediaUrl : r.dataSrc ? r.dataSrc : r.dataSrcset ? r.dataSrcset : null;
+  return r.mediaUrl ? r.mediaUrl : r.dataSrc ? r.dataSrc : r.dataSrcset ? r.dataSrcset : null;
 }
 async function checkNsfwWithModel(r) {
   const e = await configSettingsStorage.get();
@@ -84387,8 +84387,8 @@ async function checkNsfwWithModel(r) {
     const t = await modelManager.getModel();
     if (r.startsWith("data:image/svg+xml"))
       return console.log("[NSFW] Skipping SVG image"), !1;
-    const n = await loadImage(r), s = await t.classify(n), a = ["Porn", "Hentai", "Sexy"];
-    return s.reduce((u, l) => a.includes(l.className) ? Math.max(u, l.probability) : u, 0) > (e.nsfwThreshold || 0.55);
+    const n = await loadImage(r), s = await t.classify(n), a = ["Porn", "Hentai", "Sexy"], o = s.reduce((u, l) => a.includes(l.className) ? Math.max(u, l.probability) : u, 0);
+    return console.log(`[NSFW] NSFW score for ${r}: ${o}`), o > e.nsfwThreshold;
   } catch (t) {
     return console.error("[NSFW] Error checking NSFW:", t), !1;
   }
@@ -84401,9 +84401,9 @@ async function loadImage(r) {
     const t = await e.blob(), n = await createImageBitmap(t), s = new OffscreenCanvas(224, 224), a = s.getContext("2d");
     if (!a)
       throw new Error("[NSFW] Failed to get canvas context");
-    return a.drawImage(n, 0, 0, 224, 224), n.close(), console.log("[NSFW] Image loaded successfully"), s;
+    return a.drawImage(n, 0, 0, 224, 224), n.close(), console.log("[NSFW] Image loaded successfully:", r), s;
   } catch (e) {
-    throw console.error("[NSFW] Error loading image:", e), e;
+    throw console.error("[NSFW] Error loading image:", r, e), e;
   }
 }
 async function playSound(r = "default.wav", e = 1) {
